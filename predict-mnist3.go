@@ -1,5 +1,5 @@
 // squared error, int
-// accuracy:
+// accuracy: 0.9691
 
 package main
 
