@@ -9,13 +9,13 @@ int square(int x) {
     return x * x;
 }
 
-int sumSqErr(const std::vector<int>& x, const std::vector<int>& y) {
+int sumSqErr(const std::vector<int>& x, const std::vector<int>& y, int begin) {
     int l = x.size();
     if (l != y.size()) {
         throw std::runtime_error("not same size");
     }
     int sum = 0;
-    for (int i = 0; i < l; i++) {
+    for (int i = begin; i < l; i++) {
         sum += square(x[i] - y[i]);
     }
     return sum;
@@ -65,7 +65,7 @@ int main() {
         int best = 0;
         int minError = -1;
         for (const auto& d : trainData) {
-            int error = sumSqErr(std::vector<int>(data.begin() + 1, data.end()), std::vector<int>(d.begin() + 1, d.end()));
+            int error = sumSqErr(data, d, 1);
             if (minError < 0 || error < minError) {
                 minError = error;
                 best = d[0];
