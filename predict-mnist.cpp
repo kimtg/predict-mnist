@@ -22,7 +22,7 @@ int sumSqErr(const std::vector<int>& x, const std::vector<int>& y, int begin) {
 }
 
 int main() {
-    std::cout << "!" << std::endl;
+    std::cout << "!\n";
     const std::string fileNameTrain = "mnist_train.csv";
     const std::string fileNameTest = "mnist_test.csv";
 
@@ -43,7 +43,7 @@ int main() {
         trainData.push_back(data);
     }
     file.close();
-    std::cout << "train data loaded. rows: " << trainData.size() << std::endl;
+    std::cout << "train data loaded. rows: " << trainData.size() << '\n';
 
     // test
     file.open(fileNameTest);
@@ -74,12 +74,10 @@ int main() {
         if (best == data[0]) {
             nCorrect++;
         }
-        std::cout << "predicted: " << best << ", answer: " << data[0] << ", accuracy: " << static_cast<double>(nCorrect) / static_cast<double>(nRows) << std::endl;
+        std::cout << "predicted: " << best << ", answer: " << data[0] << ", accuracy: " << static_cast<double>(nCorrect) / static_cast<double>(nRows) << '\n';
     }
     file.close();
-    std::cout << "train data loaded. rows: " << nRows << ", accuracy: " << static_cast<double>(nCorrect) / static_cast<double>(nRows) << std::endl;
+    std::cout << "test data rows: " << nRows << ", accuracy: " << static_cast<double>(nCorrect) / static_cast<double>(nRows) << '\n';
 
     return 0;
 }
-
-
