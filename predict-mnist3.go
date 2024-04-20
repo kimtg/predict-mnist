@@ -91,8 +91,8 @@ func main() {
 		if best == int(data[0]) {
 			nCorrect++
 		}
-		fmt.Println("predicted:", best, "answer:", data[0], "accuracy:", float64(nCorrect)/float64(nRows))
+		fmt.Println("row:", nRows, "predicted:", best, "answer:", data[0], "accuracy:", float64(nCorrect)/float64(nRows))
 	}
 	file.Close()
-	fmt.Println("train data loaded. rows:", nRows, "accuracy:", float64(nCorrect)/float64(nRows))
 }
+
