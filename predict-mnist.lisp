@@ -1,3 +1,5 @@
+(require "asdf")
+
 (defun square (x) (* x x))
 
 (defun sum-square-error (xs ys)
@@ -13,7 +15,7 @@
   (vector-push-extend input *inputs*)
   (vector-push-extend output *outputs*))
 
-(defun guess (input)
+(defun predict (input)
   (let ((best 0)
         (min-error -1))
     (loop for i from 0
@@ -24,8 +26,6 @@
                    best (aref *outputs* i)))
     best))
 
-(require "asdf")
-
 (defun main ()
   ;; train
   (with-open-file (stream "mnist_train.csv")
@@ -33,7 +33,6 @@
           while line
           for num-rows from 1
           do
-          (format t "train ~a~%" num-rows)
           (let* ((split (uiop:split-string line :separator ","))
                     (input (coerce (mapcar #'parse-integer (cdr split)) 'vector))
                     (output (parse-integer (car split))))
@@ -47,15 +46,13 @@
             while line
             for num-rows from 1
             do
-            (format t "test ~a~%" num-rows)
             (let* ((split (uiop:split-string line :separator ","))
                    (input (coerce (mapcar #'parse-integer (cdr split)) 'vector))
                    (output (parse-integer (car split)))
                    ;; predict
-                   (best (guess input)))
-              (when (= best output)
+                   (predicted (predict input)))
+              (when (= predicted output)
                 (incf num-correct))
-              (format t "predicted: ~a answer: ~a accuracy: ~a~%" best output (/ (coerce num-correct 'float) num-rows))
-              )))))
+              (format t "row: ~a predicted: ~a answer: ~a accuracy: ~a~%" num-rows predicted output (/ (coerce num-correct 'float) num-rows)))))))
 
 (main)

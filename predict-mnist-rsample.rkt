@@ -42,31 +42,25 @@
 
   ;; train
   (define train-data
-    (with-input-from-file file-name-train
-      (lambda ()
-        (let loop ((lines '()))
-          (let ((line (read-line)))
-            (if (eof-object? line)
-                (reverse lines)
-                (let ((split (string-split line ",")))
-                  (loop (cons (for/vector ([s (in-list split)]) (string->number s)) lines)))))))))
+    (call-with-input-file file-name-train
+      (lambda (in)
+        (for/list ([line (in-lines in)])
+          (for/vector ([field (in-list (string-split line ","))]) (string->number field))))))
+  
   (printf "train data loaded. rows: ~a~n" (length train-data))
 
   ;; test
   (define n-rows 0)
   (define n-correct 0)
-  (with-input-from-file file-name-test
-    (lambda ()
-      (let loop ()
-        (let ((line (read-line))) ; read line
-          (unless (eof-object? line)
-            (let ((test (for/vector ([s (in-list (string-split line ","))]) (string->number s)))) ; convert line to vector
-              (set! n-rows (+ n-rows 1))
-              (define predicted (predict train-data test 20 40))              
-              (define answer (vector-ref test 0))
-              (when (= predicted answer)
-                (set! n-correct (+ n-correct 1)))
-              (printf "row: ~a predicted: ~a answer: ~a accuracy: ~a~n" n-rows predicted answer (/ (exact->inexact n-correct) n-rows))
-              (loop))))))))
+  (call-with-input-file file-name-test
+    (lambda (in)
+      (for ([line (in-lines in)])
+        (let ((test (for/vector ([field (in-list (string-split line ","))]) (string->number field)))) ; convert line to vector
+          (set! n-rows (+ n-rows 1))
+          (define predicted (predict train-data test 20 40))              
+          (define answer (vector-ref test 0))
+          (when (= predicted answer)
+            (set! n-correct (+ n-correct 1)))
+          (printf "row: ~a predicted: ~a answer: ~a accuracy: ~a~n" n-rows predicted answer (/ (exact->inexact n-correct) n-rows)))))))
   
 (main)
