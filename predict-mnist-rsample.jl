@@ -1,3 +1,4 @@
+# random sample ensemble. accuracy: 0.97
 using DelimitedFiles
 using Random
 
@@ -65,13 +66,13 @@ function main()
         for line in eachline(io)
             test = parse.(Float64, split(line, ","))
             n_rows += 1
-            predicted = predict(train_data, test, 5, 156)
+            predicted = predict(train_data, test, 10, 600)
             answer = test[1]
             if predicted == answer
                 n_correct += 1
             end
             accuracy = n_correct / n_rows
-            println("row: $n_rows predicted: $predicted answer: $answer accuracy: $accuracy")
+            println("row: $n_rows, predicted: $predicted, answer: $answer, accuracy: $accuracy")
         end
     end
 end
