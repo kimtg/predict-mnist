@@ -37,15 +37,7 @@ function predict(train_data::Vector{Vector{Float64}}, test::Vector{Float64}, nen
         votes[predicted] = get(votes, predicted, 0) + 1
     end
     # find max vote
-    maxk = 0.0
-    maxv = 0
-    for (k, v) in votes
-        if v > maxv
-            maxk = k
-            maxv = v
-        end
-    end
-    return maxk
+    return findmax(votes)[2]
 end
 
 function main()
