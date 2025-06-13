@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <algorithm>
+#include <random>
 #include <map>
 
 using namespace std;
@@ -40,18 +41,12 @@ double predict(const vector<vector<double>>& trainData, const vector<double>& te
 
         // Create a shuffled vector of indices from 1 to test.size()-1
         vector<int> indices(test.size() - 1);
-        for (size_t i = 0; i < indices.size(); ++i) {
-            indices[i] = i;
-        }
-        random_shuffle(indices.begin(), indices.end());
-
-        vector<int> sampleIndexes(nsample);
-        for (int i = 0; i < nsample; ++i) {
-            sampleIndexes[i] = indices[i] + 1; // Adjust index to be 1-based
-        }
+        iota(indices.begin(), indices.end(), 1);
+        shuffle(indices.begin(), indices.end(), std::mt19937{std::random_device{}()});
+        indices.resize(nsample);
 
         for (const auto& train : trainData) {
-            double error = sumSqErrSample(test, train, 1, sampleIndexes);
+            double error = sumSqErrSample(test, train, 1, indices);
             if (error < minError || minError < 0) {
                 predicted = train[0];
                 minError = error;
