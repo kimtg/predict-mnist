@@ -1,9 +1,4 @@
 #lang racket
-
-(require racket/file)
-(require racket/string)
-(require racket/list)
-
 (define (square x)
   (* x x))
 
@@ -19,11 +14,11 @@
   (define votes (make-hash))
   (for ([sample-num (in-range nensemble)])
     (define predicted 0)
-    (define min-error -1)
+    (define min-error +inf.0)
     (define sample-indexes (take (shuffle (range 1 (vector-length test))) nsample))
     (for ([train (in-list train-data)])
       (define error (sum-sq-err-sample test train 1 sample-indexes))
-      (when (or (< error min-error) (< min-error 0))
+      (when (< error min-error)
         (set! predicted (vector-ref train 0))
         (set! min-error error)))
     (hash-set! votes predicted (add1 (hash-ref! votes predicted 0))))
